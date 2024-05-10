@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Genre;
+use App\Entity\MovieGenre;
 use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,6 +53,12 @@ class Movie
     #[Groups(['default'])]
     private ?string $wikipediaUrl = null;
 
+    /**
+     * @var Collection<int, Genre>
+     */
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies')]
+    #[ORM\JoinTable(name: "movies_genres")]
+    private Collection $genres;
     /**
      * @var Collection<int, MovieGenre>
      */
@@ -177,6 +185,14 @@ class Movie
         return $this;
     }
 
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+    
     /**
      * @return Collection<int, MovieGenre>
      */

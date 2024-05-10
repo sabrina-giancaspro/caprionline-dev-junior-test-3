@@ -21,6 +21,27 @@ class MovieRepository extends ServiceEntityRepository
         parent::__construct($registry, Movie::class);
     }
 
+    public function findAll($orderBy = null): array
+    {
+        // creo query builder per l'entità Movie
+        $query = $this->createQueryBuilder('m');
+        
+        // applica l'ordinamento se il parametro $orderBy è specificato
+        if ($orderBy !== null) {
+            if ($orderBy === 'recent') {
+                // ordino per data di rilascio in ordine decrescente 
+                $query->orderBy('m.releaseDate', 'DESC');
+            } elseif ($orderBy === 'rating') {
+                // ordino per rating 
+                $query->orderBy('m.rating', 'DESC');
+            }
+        }
+        // esegue query e restituisce i risultati
+        return $query
+            ->getQuery()
+            ->getResult();
+    }
+   
     //    /**
     //     * @return Movie[] Returns an array of Movie objects
     //     */

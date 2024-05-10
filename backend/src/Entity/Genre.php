@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Movie;
 use App\Repository\GenreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
@@ -16,6 +19,14 @@ class Genre
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'genres')]
+    private $movies;
+    public function __construct()
+    {
+        $this->movies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -32,5 +43,13 @@ class Genre
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Movie>
+     */
+    public function getMovies(): Collection
+    {
+        return $this->movies;
     }
 }
